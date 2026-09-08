@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://c2cofcclbljqt"]
+
+[ext_resource type="PackedScene" uid="uid://c6tx3302hamp7" path="res://models/tb2.glb" id="1_0lgdb"]
+[ext_resource type="Script" uid="uid://28e82cljw7ea" path="res://scripts/olcum.gd" id="1_bo153"]
+
+[node name="Aircraft" type="Node3D" unique_id=156076117]
+script = ExtResource("1_bo153")
+
+[node name="ModelRoot" type="Node3D" parent="." unique_id=146529933]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.4, 0)
+
+[node name="Sketchfab_Scene" parent="ModelRoot" unique_id=207225576 instance=ExtResource("1_0lgdb")]

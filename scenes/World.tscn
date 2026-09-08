@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://ctckwh8uq6fiy"]
+
+[ext_resource type="Script" uid="uid://bcfdajdl1wg2q" path="res://scripts/camera_rig.gd" id="1_32lhk"]
+[ext_resource type="Texture2D" uid="uid://ddmbccvs82oms" path="res://materials/textures/Grass007_2K-PNG_Color.png" id="1_hlk0d"]
+[ext_resource type="PackedScene" uid="uid://c2cofcclbljqt" path="res://scenes/aircraft.tscn" id="1_kqs1s"]
+[ext_resource type="Texture2D" uid="uid://binvej80nijte" path="res://materials/textures/Grass007_2K-PNG_NormalGL.png" id="2_0uv0p"]
+[ext_resource type="Script" uid="uid://b1kpa0wt1n1g" path="res://scripts/fdm_link.gd" id="3_7g83o"]
+[ext_resource type="Texture2D" uid="uid://dypif0xte25uc" path="res://materials/textures/Grass007_2K-PNG_Roughness.png" id="3_b3faq"]
+[ext_resource type="Script" uid="uid://32qk5iypij3i" path="res://scripts/ground_follow.gd" id="4_0uv0p"]
+[ext_resource type="Script" uid="uid://hbrpqex7fvee" path="res://scripts/hud.gd" id="8_b3faq"]
+[ext_resource type="Resource" path="res://resources/default_world_origin.tres" id="9_origin"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jxc04"]
+size = Vector2(10000, 10000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_io8um"]
+albedo_texture = ExtResource("1_hlk0d")
+roughness_texture = ExtResource("3_b3faq")
+normal_enabled = true
+normal_texture = ExtResource("2_0uv0p")
+
+[sub_resource type="BoxMesh" id="BoxMesh_1hvs6"]
+size = Vector3(45, 0.3, 3000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqs1s"]
+albedo_color = Color(0.18039216, 0.18039216, 0.1882353, 1)
+uv1_scale = Vector3(0.25, 0.25, 0.25)
+uv1_triplanar = true
+texture_filter = 5
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fx35i"]
+ground_bottom_color = Color(0.24313726, 0.4, 0.20784314, 1)
+
+[sub_resource type="Sky" id="Sky_jxc04"]
+sky_material = SubResource("ProceduralSkyMaterial_fx35i")
+
+[sub_resource type="Environment" id="Environment_8dijw"]
+background_mode = 2
+sky = SubResource("Sky_jxc04")
+
+[sub_resource type="BoxMesh" id="BoxMesh_8dijw"]
+size = Vector3(1, 0.05, 2800)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jxc04"]
+albedo_color = Color(0.9098039, 0.9098039, 0.9098039, 1)
+
+[node name="World" type="Node3D" unique_id=436287484]
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=1917063795 node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05178249, -0.15097308, 0.06569314)
+mesh = SubResource("PlaneMesh_jxc04")
+surface_material_override/0 = SubResource("StandardMaterial3D_io8um")
+script = ExtResource("4_0uv0p")
+target = NodePath("../Aircraft")
+
+[node name="Runway" type="MeshInstance3D" parent="." unique_id=1795043395]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00728631, -0.012241125, 0.003639698)
+mesh = SubResource("BoxMesh_1hvs6")
+surface_material_override/0 = SubResource("StandardMaterial3D_kqs1s")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=872518750]
+transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=850225571]
+environment = SubResource("Environment_8dijw")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1597908655 node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, -0.036049917, 0.99935, 0, -0.9993501, -0.036049914, -4.2461796, 23.725662, -56.014477)
+script = ExtResource("1_32lhk")
+target = NodePath("../Aircraft")
+chase_offset = Vector3(0, 20, 15)
+chase_smooth = 1.0
+cockpit_offset = Vector3(0, 1, -1.5)
+
+[node name="CenterLine" type="MeshInstance3D" parent="." unique_id=1398567692]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, -1500)
+mesh = SubResource("BoxMesh_8dijw")
+surface_material_override/0 = SubResource("StandardMaterial3D_jxc04")
+
+[node name="Aircraft" parent="." unique_id=156076117 instance=ExtResource("1_kqs1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -50)
+script = ExtResource("3_7g83o")
+port = 5005
+runway_surface_y = 0.3
+smooth = 25.0
+world_origin = ExtResource("9_origin")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1101163696]
+
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=178478561 node_paths=PackedStringArray("aircraft")]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("8_b3faq")
+aircraft = NodePath("../../Aircraft")

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="GeoReference" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/geo_reference.gd" id="1_geo"]
+
+[resource]
+script = ExtResource("1_geo")
+origin_lat_deg = 0.0
+origin_lon_deg = 0.0
+origin_alt_msl_m = 0.0
