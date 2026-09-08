@@ -73,7 +73,8 @@
       "usage": [
         "imagery"
       ],
-      "file": "source/sentinel2_ltbu.tif"
+      "file": "source/sentinel2_ltbu.tif",
+      "attribution": "Contains modified Copernicus Sentinel data [2026]"
     }
   ]
 }
