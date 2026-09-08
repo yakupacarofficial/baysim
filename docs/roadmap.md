@@ -1,85 +1,194 @@
-# Geliştirme yol haritası
+# BAYSIM geliştirme yol haritası
 
-Bu sıra, BAYSIM'in tek-uçaklı prototipten `jsb-forge` ile birlikte veya bağımsız çalışabilen görselleştirme sistemine dönüşümünü tanımlar. Durumlar kod ve testlerle birlikte güncellenmelidir.
+Bu belge işlerin bağımlılık sırasını, her fazın çıktısını ve tamamlanma ölçütünü tanımlar. Gerçek dünya veri kaynakları ve veri üretim hattı için [real-world-data.md](real-world-data.md) kullanılır.
 
-## Altyapı — bağımsız depo
+## Ürün hedefi
+
+İlk ana dikey dilim şudur:
+
+> Kullanıcı `jsb-forge` içinden bir uçak ve gerçek bir havalimanı seçer; pistten veya havada başlatılan JSBSim uçuşunu doğru konum/yönelimle BAYSIM'de canlı izler, aynı uçuşu daha sonra kayıttan oynatır ve otopilot davranışını kameralar/HUD üzerinden inceler.
+
+Bu hedef için gerçek dünya grafiğini ilk sıraya almak doğru değildir. Önce uçak seçimi, ortak telemetri ve replay sınırları sabitlenmelidir; aksi durumda arazi ve pist kodu geçici tek-uçak/CSV yapısına bağlanır.
+
+## Temel ilkeler
+
+- Uçuş fiziğinin sahibi `jsb-forge`, görselleştirmenin sahibi BAYSIM'dir.
+- Canlı ve replay akışları aynı normalize edilmiş uçak durumunu üretir.
+- Veri kaynağı, sürüm, indirme tarihi, lisans ve dönüşüm bilgisi manifestte tutulur.
+- İlk gerçek-dünya paketi çevrimdışı ve deterministik olur; internet zorunlu çalışma zamanı bağımlılığı değildir.
+- Coğrafi doğruluk ile görsel süs ayrıdır. Önce pist/irtifa/eksen doğruluğu, sonra imagery ve binalar gelir.
+- Bu sistem eğitim, mühendislik gözlemi ve görselleştirme içindir; sertifikalı seyrüsefer verisi değildir.
+
+## Faz 0 — depo ve jeodezi temeli
 
 **Durum: tamamlandı.**
 
-- BAYSIM ayrı Git deposu olarak oluşturuldu.
-- Varsayılan dal `main`.
-- `jsb-forge` kodu veya uçak fiziği bu depoya kopyalanmadı.
-- Birlikte çalışma sınırı dosya paylaşımı değil, sürümlü protokol olacak.
-
-Uzak Git sunucusu henüz tanımlı değildir.
-
-## 1. WGS84 ve yerel ENU dünya orijini
-
-**Durum: tamamlandı.**
-
-- Paylaşılabilir `GeoReference` kaynağı eklendi.
+- BAYSIM bağımsız Git deposu ve `main` dalı olarak oluşturuldu.
+- GitHub remote'u: `https://github.com/yakupacarofficial/baysim.git`
+- WGS84 → ECEF → yerel ENU dönüşümü eklendi.
 - `origin_lat_deg`, `origin_lon_deg`, `origin_alt_msl_m` tanımlandı.
-- WGS84 → ECEF hesapları 64-bit yapılıyor.
-- ECEF → yerel ENU → Godot eksen dönüşümü eklendi.
-- Yerel north/east modu geriye uyumlu tutuldu.
-- Yüksek rakımlı pist için MSL-orijin farkı test edildi.
+- Yerel north/east ve WGS84 konum modları test edildi.
 
-Kalan ileri işler: gerçek arazi geldiğinde jeoit modeli ve çok uzun mesafeler için floating-origin.
+## Faz 1 — uçak model profilleri
 
-## 2. Uçak model profilleri
+**Durum: sıradaki uygulama fazı.**
 
-**Durum: sıradaki adım.**
+### Çıktılar
 
-Her uçak için veri odaklı bir profil tanımlanacak:
+- `AircraftProfile` adlı veri kaynağı
+- benzersiz `aircraft_id`
+- GLB/GLTF veya PackedScene yolu
+- ölçek ve model eksen dönüşümü
+- görsel kök/teker temas yüksekliği
+- chase, cockpit, tail ve özel kamera bağlantıları
+- profil kayıt defteri ve uçak spawn sistemi
+- mevcut TB2 sahnesinin profile taşınması
+- dış model gerektirmeyen basit bir debug-aircraft profili
 
-- benzersiz uçak kimliği
-- GLB/GLTF sahne yolu
-- görsel ölçek
-- eksen/yönelim düzeltmesi
-- model kökü ve teker temas yüksekliği
-- chase, cockpit, tail ve isteğe bağlı özel kamera bağlantıları
-- ileride kontrol yüzeyi ve iniş takımı düğüm eşlemeleri
+### Tamamlanma ölçütü
 
-Tamamlanma ölçütü: World sahnesini değiştirmeden en az iki model profili arasında geçilebilmesi ve kamera konumlarının profil tarafından belirlenmesi.
+World sahnesi değiştirilmeden TB2 ve debug-aircraft arasında geçilebilmeli; tüm kameralar profil verisinden kurulmalı; eksik model/profil anlaşılır hata vermelidir.
 
-## 3. Sürümlü telemetri protokolü
-
-**Durum: bekliyor.**
-
-İlk sürüm en az şunları taşımalı:
-
-- `schema_version`, mesaj türü, uçak ve oturum kimliği
-- monoton paket sıra numarası ve simülasyon zamanı
-- dünya orijini ve konum referans türü
-- konum, yönelim, doğrusal/açısal hızlar
-- hava verileri
-- kontrol komutları ve gerçek yüzey konumları
-- motor dizisi ve iniş takımı durumu
-- otopilot modu, hedefleri ve temel hata/komut değerleri
-
-Tamamlanma ölçütü: aynı sözleşmenin `jsb-forge` üreticisi ve BAYSIM alıcısı tarafından sözleşme testleriyle doğrulanması; bozuk veya desteklenmeyen sürümlerin anlaşılır biçimde reddedilmesi.
-
-## 4. Canlı ve kayıtlı telemetri kaynakları
+## Faz 2 — sürümlü telemetri protokolü
 
 **Durum: bekliyor.**
 
-Normalize edilmiş uçak durumunu üreten ortak bir kaynak arayüzü kurulacak:
+### Çıktılar
 
-- canlı UDP kaynağı
-- kayıt/replay kaynağı
-- oynat/duraklat, hız ve zaman çizgisi
-- paket kaybı ve bağlantı istatistikleri
+- repo içinde makinece doğrulanabilir `schema/v1` tanımı
+- `hello/session`, `aircraft_state`, `event` ve `end` mesajları
+- şema sürümü, oturum/uçak kimliği, paket sıra numarası
+- simülasyon zamanı ve isteğe bağlı üretim zamanı
+- dünya orijini, yatay/dikey datum ve koordinat referansı
+- konum, quaternion yönelim, hızlar ve hava verileri
+- kontrol komutları/gerçek yüzeyler, motorlar ve iniş takımı
+- otopilot modu, hedefleri, hataları ve komutları
+- eski CSV için sınırlı geçiş adaptörü
 
-Tamamlanma ölçütü: aynı uçuşun canlı akış ve kayıt dosyasından görsel bileşenlerde değişiklik olmadan oynatılabilmesi.
+JSON ile başlanması planlanır: 60–120 Hz tek/az uçak için incelenebilirlik ve sözleşme testi, ikili format kazancından daha değerlidir. Ölçüm göstermeden özel binary protokole geçilmez.
 
-## Sonraki katmanlar
+### Tamamlanma ölçütü
 
-İlk dört adımdan sonra değerlendirilecek işler:
+Aynı örnek mesajlar `jsb-forge` üreticisi ve BAYSIM alıcısında sözleşme testlerinden geçmeli; desteklenmeyen sürüm, eksik zorunlu alan ve sıra kaybı ölçülebilir olmalıdır.
 
-- gerçek havaalanı/pist ve arazi veri kaynakları
-- floating origin ve arazi tile yaşam döngüsü
-- çoklu uçak/yer hedefi/mühimmat
-- animasyonlu kontrol yüzeyleri, iniş takımı ve motorlar
-- kokpit göstergeleri ve otopilot hata grafikleri
-- kamera kayıt/çıktı sistemi
-- BAYSIM'den simülasyona kontrollü komut geri kanalı
+## Faz 3 — ortak canlı/replay kaynak katmanı
+
+**Durum: bekliyor.**
+
+### Çıktılar
+
+- taşıma ayrıntılarından bağımsız normalize `AircraftState`
+- `UdpTelemetrySource`
+- `ReplayTelemetrySource`
+- zaman çizgisi: oynat, duraklat, ileri/geri sar, hız seç
+- kayıt dosyası başlığında şema, senaryo, uçak ve dünya manifesti
+- paket kaybı, gecikme ve bağlantı istatistikleri
+
+### Tamamlanma ölçütü
+
+Aynı uçuş canlı UDP ve kayıt dosyasından model, kamera ve HUD koduna dokunulmadan oynatılmalı. Belirli replay zamanı aynı uçak durumunu deterministik üretmelidir.
+
+## Faz 4 — `jsb-forge` dikey entegrasyonu
+
+**Durum: bekliyor.**
+
+### Çıktılar
+
+- `jsb-forge` waypoint döngüsünde v1 telemetri üreticisi
+- pistten kalkış ve havada başlangıç için ortak scenario manifesti
+- BAYSIM'in `hello/session` mesajından doğru uçak ve dünya profilini seçmesi
+- görev sonu, payload bırakma ve kritik olay mesajları
+- mevcut FlightGear çıkışının bağımsız/opsiyonel kalması
+
+### Tamamlanma ölçütü
+
+En az bir `ground` ve bir `air` senaryosu 1× gerçek zamanda canlı izlenmeli, kaydedilmeli ve tekrar oynatılmalıdır. Başlangıç konumu, heading, MSL irtifası ve simülasyon zamanı iki projede aynı olmalıdır.
+
+## Faz 5 — gerçek havalimanı paketi v1
+
+**Durum: veri hattı tasarlandı, uygulama bekliyor.**
+
+### Kapsam
+
+İlk sürüm tek seçilmiş havalimanına odaklanır:
+
+- havalimanı/pist kataloğu
+- pist uç noktaları, true heading, genişlik, yüzey ve displaced threshold
+- dünya orijini ve dikey datum
+- 20–30 km çevrede DEM tabanlı arazi
+- prosedürel pist işaretleri ve basit apron/taksi yolu bağlamı
+- veri/lisans/dönüşüm manifesti
+
+Uydu görüntüsü bu fazın zorunlu kabul kriteri değildir. Pist ve arazi doğru çalıştıktan sonra sağlayıcı politikası belirlenerek eklenir.
+
+### Tamamlanma ölçütü
+
+Seçilen pistin ölçülen sahne uzunluğu ve true heading'i kaynak verinin toleransı içinde olmalı; pist eşik irtifaları araziyle görsel olarak çakışmamalı; ground-start uçak tekerleri pist seviyesinde görünmelidir.
+
+## Faz 6 — tile tabanlı arazi ve scenery
+
+**Durum: bekliyor.**
+
+### Çıktılar
+
+- kamera/uçak çevresinde arazi tile yaşam döngüsü ve LOD
+- floating-origin; coğrafi gerçek durum korunurken Godot sahnesi yeniden merkezlenir
+- pist/apron düzleştirme ve DEM ile dikiş
+- OSM/Overture tabanlı yollar, binalar ve önemli nesneler
+- sağlayıcıdan bağımsız raster/imagery katmanı
+- disk önbelleği ve veri sürümü sabitleme
+- uzun görevler için bellek/FPS bütçeleri
+
+Küresel 3D Tiles/Cesium Native entegrasyonu doğrudan ana uygulama yolu yapılmadan önce ayrı bir teknik deneme olarak ölçülür.
+
+### Tamamlanma ölçütü
+
+En az 100 km'lik replay boyunca görünür origin titreşimi, tile çatlağı veya kontrolsüz bellek büyümesi olmamalı; aynı veri paketi çevrimdışı tekrar açılabilmelidir.
+
+## Faz 7 — gerçek hava ve görsel çevre
+
+**Durum: bekliyor.**
+
+### Çıktılar
+
+- METAR/TAF sağlayıcı adaptörü ve yerel cache
+- rüzgâr yönü/hızı, sıcaklık, basınç, görüş, bulut ve yağış modeli
+- hava snapshot'ının scenario ve replay içine gömülmesi
+- görsel hava ile JSBSim atmosfer girişlerinin aynı normalize kaynaktan üretilmesi
+- kullanıcı tarafından elle override edilebilen deterministik hava profili
+
+### Tamamlanma ölçütü
+
+Bir METAR snapshot'ından üretilen rüzgâr/basınç değerleri hem `jsb-forge` hem BAYSIM manifestinde aynı olmalı; replay güncel internet verisi değişse bile aynı havayı göstermelidir.
+
+## Faz 8 — uçak sistemleri, kameralar ve otopilot gözlemi
+
+**Durum: bekliyor.**
+
+- animasyonlu aileron/elevator/rudder/elevon, flap, gear ve motorlar
+- model profiline bağlı sınırsız kamera socket'i
+- kokpit göstergeleri ve çoklu viewport
+- otopilot hedef/gerçek/hata grafikleri
+- kontrol doygunluğu, limiter ve mod geçiş olayları
+- ekran/video alma ve senkron telemetri dışa aktarımı
+
+## Faz 9 — çoklu varlık ve ürünleştirme
+
+**Durum: bekliyor.**
+
+- çoklu uçak, mühimmat, hava/yer hedefleri
+- entity kimliği ve yaşam döngüsü olayları
+- görev editörü ile görsel senaryo hazırlama
+- performans profilleri, ayar ekranı ve export paketleri
+- CI testleri, veri paketi doğrulayıcı ve geriye uyumluluk matrisi
+
+## Şimdi başlayabileceğimiz işler
+
+Bağımlılık sırasına göre bir sonraki geliştirme paketi Faz 1'dir:
+
+1. `AircraftProfile` Resource şemasını tanımla.
+2. TB2'nin hardcoded dönüşüm ve kamera ofsetlerini profile taşı.
+3. Debug-aircraft profiliyle runtime model değiştirmeyi test et.
+4. Profil formatını ve yeni model ekleme akışını `models/README.md` içinde belgele.
+
+Bu tamamlanınca Faz 2 protokolü tasarlanırken uçak kimliği ve kamera/model seçiminin gerçek tüketicisi hazır olacaktır.

@@ -1,6 +1,6 @@
 # BAYSIM mimarisi
 
-Bu belge çalışan sistemin sınırlarını ve kod içindeki sorumluluk dağılımını anlatır. Hedef mimari için [roadmap.md](roadmap.md), mevcut geçici UDP formatı için [telemetry-legacy-csv.md](telemetry-legacy-csv.md) kullanılır.
+Bu belge çalışan sistemin sınırlarını ve kod içindeki sorumluluk dağılımını anlatır. Hedef mimari için [roadmap.md](roadmap.md), mevcut geçici UDP formatı için [telemetry-legacy-csv.md](telemetry-legacy-csv.md), pist/arazi/hava veri hattı için [real-world-data.md](real-world-data.md) kullanılır.
 
 ## Sistem sınırı
 

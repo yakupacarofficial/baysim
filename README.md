@@ -17,6 +17,7 @@ BAYSIM, JSBSim uçuşlarını Godot 4 içinde canlı veya kayıttan görselleşt
 - [Mimari ve bileşen sınırları](docs/architecture.md)
 - [Geçici CSV telemetri sözleşmesi](docs/telemetry-legacy-csv.md)
 - [Geliştirme yol haritası](docs/roadmap.md)
+- [Gerçek dünya veri ve AirportPack planı](docs/real-world-data.md)
 - [Görsel modeller ve varlık provenansı](models/README.md)
 
 Davranış, veri sözleşmesi veya mimari değiştiğinde ilgili belge kod ve testlerle aynı commit içinde güncellenir.
