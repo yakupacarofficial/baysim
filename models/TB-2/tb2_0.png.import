@@ -2,23 +2,24 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpujoq56ctfue"
-path="res://.godot/imported/tb2_3.png-52e797bd5d939d20def94e1e7217858a.ctex"
+uid="uid://vwmmdvvlbps4"
+path.s3tc="res://.godot/imported/tb2_0.png-9644b25cf05926c029667727f4d816c8.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
-"md5": "df65ebcf6a9a568aa33c17fdc2b96ce3"
+"md5": "8fa5e8d1c638ce83144d1cfd3155bc78"
 }
 
 [deps]
 
-source_file="res://models/tb2_3.png"
-dest_files=["res://.godot/imported/tb2_3.png-52e797bd5d939d20def94e1e7217858a.ctex"]
+source_file="res://models/TB-2/tb2_0.png"
+dest_files=["res://.godot/imported/tb2_0.png-9644b25cf05926c029667727f4d816c8.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

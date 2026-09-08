@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bcfdajdl1wg2q" path="res://scripts/camera_rig.gd" id="1_32lhk"]
 [ext_resource type="Texture2D" uid="uid://ddmbccvs82oms" path="res://materials/textures/Grass007_2K-PNG_Color.png" id="1_hlk0d"]
-[ext_resource type="PackedScene" uid="uid://c2cofcclbljqt" path="res://scenes/aircraft.tscn" id="1_kqs1s"]
+[ext_resource type="PackedScene" uid="uid://c2cofcclbljqt" path="res://models/TB-2/aircraft.tscn" id="1_kqs1s"]
 [ext_resource type="Texture2D" uid="uid://binvej80nijte" path="res://materials/textures/Grass007_2K-PNG_NormalGL.png" id="2_0uv0p"]
 [ext_resource type="Script" uid="uid://b1kpa0wt1n1g" path="res://scripts/fdm_link.gd" id="3_7g83o"]
 [ext_resource type="Texture2D" uid="uid://dypif0xte25uc" path="res://materials/textures/Grass007_2K-PNG_Roughness.png" id="3_b3faq"]

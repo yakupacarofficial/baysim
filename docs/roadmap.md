@@ -8,7 +8,7 @@ Bu belge işlerin bağımlılık sırasını, her fazın çıktısını ve tamam
 
 > Kullanıcı `jsb-forge` içinden bir uçak ve gerçek bir havalimanı seçer; pistten veya havada başlatılan JSBSim uçuşunu doğru konum/yönelimle BAYSIM'de canlı izler, aynı uçuşu daha sonra kayıttan oynatır ve otopilot davranışını kameralar/HUD üzerinden inceler.
 
-Bu hedef için gerçek dünya grafiğini ilk sıraya almak doğru değildir. Önce uçak seçimi, ortak telemetri ve replay sınırları sabitlenmelidir; aksi durumda arazi ve pist kodu geçici tek-uçak/CSV yapısına bağlanır.
+İlk uygulama dilimi tek bir pilot havalimanında çevre sözleşmesini ve pist/irtifa doğruluğunu kurar. Bu aşama yalnızca dünya verisini tüketen dar bir arayüz üretir; arazi ve pist kodu geçici tek-uçak/CSV yapısına bağlanmaz. Uçak profilleri, ortak telemetri ve replay bunun ardından gelir.
 
 ## Temel ilkeler
 
@@ -30,10 +30,33 @@ Bu hedef için gerçek dünya grafiğini ilk sıraya almak doğru değildir. Ön
 - Yerel north/east ve WGS84 konum modları test edildi.
 - Splash ekranlı Python launcher, sistem sağlık kontrolleri ve Godot süreç yönetimi eklendi.
 - Launcher ayarları sürümlü runtime JSON üzerinden Godot ana sahnesine bağlandı.
+- Mevcut TB2 model, texture ve sahne dosyaları `models/TB-2/` paketinde toplandı.
 
-## Faz 1 — uçak model profilleri
+## Faz 1 — pilot gerçek havalimanı paketi
 
-**Durum: sıradaki uygulama fazı.**
+**Durum: veri hattı tasarlandı; pilot havalimanı seçimi bekleniyor.**
+
+### Kapsam
+
+İlk sürüm tek seçilmiş havalimanına ve yaklaşık 20–30 km çevresine odaklanır:
+
+- sürümlü `world.json` ve kaynak/lisans manifesti
+- havalimanı/pist kataloğu
+- pist uç noktaları, true heading, genişlik, yüzey ve displaced threshold
+- ortak ENU dünya orijini ve açık dikey datum
+- önce prosedürel pist ve düz doğrulama zemini
+- ardından DEM tabanlı arazi ve pist-arazi dikişi
+- basit apron/taksi yolu bağlamı
+
+Uydu görüntüsü bu fazın zorunlu kabul kriteri değildir. Pist ve arazi doğru çalıştıktan sonra lisansı uygun bir sağlayıcı veya kullanıcıya ait GeoTIFF ile eklenir.
+
+### Tamamlanma ölçütü
+
+Seçilen pistin sahnedeki uzunluğu ve true heading'i kaynak verinin toleransı içinde olmalı; pist eşik irtifaları araziyle çakışmamalı; aynı paket internet olmadan tekrar yüklenebilmelidir. TB2 teker teması profil aşamasına kadar açıkça tanımlı geçici bir görsel ofsetle doğrulanır.
+
+## Faz 2 — uçak model profilleri
+
+**Durum: pilot AirportPack sonrasında.**
 
 ### Çıktılar
 
@@ -51,7 +74,7 @@ Bu hedef için gerçek dünya grafiğini ilk sıraya almak doğru değildir. Ön
 
 World sahnesi değiştirilmeden TB2 ve debug-aircraft arasında geçilebilmeli; tüm kameralar profil verisinden kurulmalı; eksik model/profil anlaşılır hata vermelidir.
 
-## Faz 2 — sürümlü telemetri protokolü
+## Faz 3 — sürümlü telemetri protokolü
 
 **Durum: bekliyor.**
 
@@ -73,7 +96,7 @@ JSON ile başlanması planlanır: 60–120 Hz tek/az uçak için incelenebilirli
 
 Aynı örnek mesajlar `jsb-forge` üreticisi ve BAYSIM alıcısında sözleşme testlerinden geçmeli; desteklenmeyen sürüm, eksik zorunlu alan ve sıra kaybı ölçülebilir olmalıdır.
 
-## Faz 3 — ortak canlı/replay kaynak katmanı
+## Faz 4 — ortak canlı/replay kaynak katmanı
 
 **Durum: bekliyor.**
 
@@ -90,7 +113,7 @@ Aynı örnek mesajlar `jsb-forge` üreticisi ve BAYSIM alıcısında sözleşme 
 
 Aynı uçuş canlı UDP ve kayıt dosyasından model, kamera ve HUD koduna dokunulmadan oynatılmalı. Belirli replay zamanı aynı uçak durumunu deterministik üretmelidir.
 
-## Faz 4 — `jsb-forge` dikey entegrasyonu
+## Faz 5 — `jsb-forge` dikey entegrasyonu
 
 **Durum: bekliyor.**
 
@@ -105,27 +128,6 @@ Aynı uçuş canlı UDP ve kayıt dosyasından model, kamera ve HUD koduna dokun
 ### Tamamlanma ölçütü
 
 En az bir `ground` ve bir `air` senaryosu 1× gerçek zamanda canlı izlenmeli, kaydedilmeli ve tekrar oynatılmalıdır. Başlangıç konumu, heading, MSL irtifası ve simülasyon zamanı iki projede aynı olmalıdır.
-
-## Faz 5 — gerçek havalimanı paketi v1
-
-**Durum: veri hattı tasarlandı, uygulama bekliyor.**
-
-### Kapsam
-
-İlk sürüm tek seçilmiş havalimanına odaklanır:
-
-- havalimanı/pist kataloğu
-- pist uç noktaları, true heading, genişlik, yüzey ve displaced threshold
-- dünya orijini ve dikey datum
-- 20–30 km çevrede DEM tabanlı arazi
-- prosedürel pist işaretleri ve basit apron/taksi yolu bağlamı
-- veri/lisans/dönüşüm manifesti
-
-Uydu görüntüsü bu fazın zorunlu kabul kriteri değildir. Pist ve arazi doğru çalıştıktan sonra sağlayıcı politikası belirlenerek eklenir.
-
-### Tamamlanma ölçütü
-
-Seçilen pistin ölçülen sahne uzunluğu ve true heading'i kaynak verinin toleransı içinde olmalı; pist eşik irtifaları araziyle görsel olarak çakışmamalı; ground-start uçak tekerleri pist seviyesinde görünmelidir.
 
 ## Faz 6 — tile tabanlı arazi ve scenery
 
@@ -186,11 +188,14 @@ Bir METAR snapshot'ından üretilen rüzgâr/basınç değerleri hem `jsb-forge`
 
 ## Şimdi başlayabileceğimiz işler
 
-Bağımlılık sırasına göre bir sonraki geliştirme paketi Faz 1'dir:
+Bir sonraki geliştirme paketi Faz 1'in en küçük dikey dilimidir:
 
-1. `AircraftProfile` Resource şemasını tanımla.
-2. TB2'nin hardcoded dönüşüm ve kamera ofsetlerini profile taşı.
-3. Debug-aircraft profiliyle runtime model değiştirmeyi test et.
-4. Profil formatını ve yeni model ekleme akışını `models/README.md` içinde belgele.
+1. Tek bir kamuya açık pilot havalimanı/ICAO seç.
+2. `worlds/<world_id>/world.json` ve `sources.json` şemalarını tanımla.
+3. Pist uçlarını doğrulanabilir bir fixture olarak kaydet.
+4. WGS84 pist uçlarını ortak ENU orijinine dönüştür.
+5. Godot'ta gerçek uzunluk, genişlik, heading ve irtifada prosedürel pist üret.
+6. Paket doğrulayıcısı ve ölçüm testlerini ekle.
+7. Düz doğrulama zemini geçtikten sonra 20–30 km DEM entegrasyonuna başla.
 
-Bu tamamlanınca Faz 2 protokolü tasarlanırken uçak kimliği ve kamera/model seçiminin gerçek tüketicisi hazır olacaktır.
+Pilot saha seçilmeden rastgele büyük veri indirilmez. Model profili Faz 2'de ele alınır; yalnızca ground-contact doğrulaması için mevcut TB2 ofseti geçici olarak kullanılır.

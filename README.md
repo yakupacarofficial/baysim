@@ -19,6 +19,7 @@ BAYSIM, JSBSim uçuşlarını Godot 4 içinde canlı veya kayıttan görselleşt
 - [Geçici CSV telemetri sözleşmesi](docs/telemetry-legacy-csv.md)
 - [Geliştirme yol haritası](docs/roadmap.md)
 - [Gerçek dünya veri ve AirportPack planı](docs/real-world-data.md)
+- [Dünya paketi klasör kuralları](worlds/README.md)
 - [Görsel modeller ve varlık provenansı](models/README.md)
 - [Python launcher kullanımı ve mimarisi](launcher/README.md)
 

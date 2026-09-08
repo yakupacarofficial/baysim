@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://g7q17w6f1cep"
-path.s3tc="res://.godot/imported/tb2_2.png-c94aa7afeb324cedfd595d6cce6b8da5.s3tc.ctex"
+path.s3tc="res://.godot/imported/tb2_2.png-a267c860872665c9a0e51d800fa6c960.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://models/tb2_2.png"
-dest_files=["res://.godot/imported/tb2_2.png-c94aa7afeb324cedfd595d6cce6b8da5.s3tc.ctex"]
+source_file="res://models/TB-2/tb2_2.png"
+dest_files=["res://.godot/imported/tb2_2.png-a267c860872665c9a0e51d800fa6c960.s3tc.ctex"]
 
 [params]
 
@@ -30,7 +30,7 @@ compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=1
-roughness/src_normal="res://models/tb2_2.png"
+roughness/src_normal="res://models/TB-2/tb2_2.png"
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2

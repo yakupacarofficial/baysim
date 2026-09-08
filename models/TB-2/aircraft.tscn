@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c2cofcclbljqt"]
 
-[ext_resource type="PackedScene" uid="uid://c6tx3302hamp7" path="res://models/tb2.glb" id="1_0lgdb"]
+[ext_resource type="PackedScene" uid="uid://c6tx3302hamp7" path="res://models/TB-2/tb2.glb" id="1_0lgdb"]
 [ext_resource type="Script" uid="uid://28e82cljw7ea" path="res://scripts/olcum.gd" id="1_bo153"]
 
 [node name="Aircraft" type="Node3D" unique_id=156076117]

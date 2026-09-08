@@ -55,9 +55,9 @@ Paylaşılabilir `GeoReference` kaynağıdır. WGS84 jeodezik konumu önce 64-bi
 
 Varsayılan kaynak [default_world_origin.tres](../resources/default_world_origin.tres) dosyasındadır. İleride pist, arazi ve bütün uçan nesneler aynı kaynağı kullanmalıdır.
 
-### `scenes/aircraft.tscn`
+### `models/TB-2/aircraft.tscn`
 
-Bugünkü tek görsel uçak sahnesidir. TB2 GLB modelini bir `ModelRoot` altında eksen ve yükseklik düzeltmesiyle tutar. Model ayrıntıları ve açık kayıtlar için [models/README.md](../models/README.md) okunmalıdır.
+Bugünkü tek görsel uçak sahnesidir. TB2 GLB modelini bir `ModelRoot` altında eksen ve yükseklik düzeltmesiyle tutar. Model ayrıntıları ve açık kayıtlar için [TB-2 model belgesi](../models/TB-2/README.md) okunmalıdır.
 
 ### `scripts/camera_rig.gd`
 
