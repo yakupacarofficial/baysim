@@ -12,6 +12,15 @@ BAYSIM, JSBSim uçuşlarını Godot 4 içinde canlı veya kayıttan görselleşt
 
 `jsb-forge` ile BAYSIM henüz aynı UDP protokolünü kullanmıyor. Ortak ve sürümlenmiş telemetri sözleşmesi ayrı bir geliştirme adımıdır.
 
+## Belgeler
+
+- [Mimari ve bileşen sınırları](docs/architecture.md)
+- [Geçici CSV telemetri sözleşmesi](docs/telemetry-legacy-csv.md)
+- [Geliştirme yol haritası](docs/roadmap.md)
+- [Görsel modeller ve varlık provenansı](models/README.md)
+
+Davranış, veri sözleşmesi veya mimari değiştiğinde ilgili belge kod ve testlerle aynı commit içinde güncellenir.
+
 ## Dünya koordinatları
 
 [default_world_origin.tres](resources/default_world_origin.tres) sahnenin WGS84 referans noktasını tutar:
