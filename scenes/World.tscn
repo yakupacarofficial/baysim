@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://32qk5iypij3i" path="res://scripts/ground_follow.gd" id="4_0uv0p"]
 [ext_resource type="Script" uid="uid://hbrpqex7fvee" path="res://scripts/hud.gd" id="8_b3faq"]
 [ext_resource type="Resource" path="res://resources/default_world_origin.tres" id="9_origin"]
+[ext_resource type="Script" path="res://scripts/world_controller.gd" id="10_world"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_jxc04"]
 size = Vector2(10000, 10000)
@@ -45,6 +46,7 @@ size = Vector3(1, 0.05, 2800)
 albedo_color = Color(0.9098039, 0.9098039, 0.9098039, 1)
 
 [node name="World" type="Node3D" unique_id=436287484]
+script = ExtResource("10_world")
 
 [node name="Ground" type="MeshInstance3D" parent="." unique_id=1917063795 node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05178249, -0.15097308, 0.06569314)

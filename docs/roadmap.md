@@ -28,6 +28,8 @@ Bu hedef için gerçek dünya grafiğini ilk sıraya almak doğru değildir. Ön
 - WGS84 → ECEF → yerel ENU dönüşümü eklendi.
 - `origin_lat_deg`, `origin_lon_deg`, `origin_alt_msl_m` tanımlandı.
 - Yerel north/east ve WGS84 konum modları test edildi.
+- Splash ekranlı Python launcher, sistem sağlık kontrolleri ve Godot süreç yönetimi eklendi.
+- Launcher ayarları sürümlü runtime JSON üzerinden Godot ana sahnesine bağlandı.
 
 ## Faz 1 — uçak model profilleri
 

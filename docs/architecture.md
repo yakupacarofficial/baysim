@@ -22,7 +22,15 @@ JSBSim / jsb-forge / kayıt dosyası
        pist / arazi / dünya
 ```
 
-Bugün yalnızca UDP kaynağı ve tek uçak vardır. Diyagramdaki ortak “Telemetri kaynağı” arayüzü canlı/kayıttan oynatma adımında eklenecektir.
+Bugün yalnızca UDP kaynağı ve tek uçak vardır. Diyagramdaki ortak “Telemetri kaynağı” arayüzü canlı/kayıttan oynatma adımında eklenecektir. Kullanıcı uygulamayı [Python launcher](../launcher/README.md) üzerinden yapılandırıp başlatabilir.
+
+### `launcher/`
+
+Python/Tk masaüstü başlatıcısıdır. Splash ekranı, kalıcı kullanıcı tercihleri, Godot/jsb-forge/JSBSim kontrolleri, UDP paket probe'u ve Godot alt-süreç yaşam döngüsünü yönetir. Uçuş fiziği çalıştırmaz ve telemetriyi renderer çalışırken aradan geçirmez.
+
+### `scripts/world_controller.gd`
+
+Launcher'ın ürettiği sürümlü runtime JSON'u ana sahneye uygular. UDP portu, poz yumuşatma, koordinat modu ve dünya orijini çocuk node'ların `_ready()` aşamasından önce; pencere modu ve çözünürlük ise ertelenmiş çağrıyla uygulanır.
 
 ## Çalışan bileşenler
 

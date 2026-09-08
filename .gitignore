@@ -2,3 +2,13 @@
 .godot/
 .godot-user/
 /android/
+
+# User-specific launcher and runtime state
+/launcher/settings.json
+/runtime/*.json
+/runtime/*.json.tmp
+/runtime/*.log
+
+# Python bytecode
+__pycache__/
+*.py[cod]

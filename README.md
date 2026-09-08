@@ -9,6 +9,7 @@ BAYSIM, JSBSim uçuşlarını Godot 4 içinde canlı veya kayıttan görselleşt
 - Uçuş telemetrisi HUD'u
 - Yerel north/east veya WGS84 tabanlı konumlandırma
 - Eksik ve bozuk UDP paketlerine karşı atomik telemetri doğrulaması
+- Splash ekranlı Python başlatıcı, sağlık kontrolleri ve runtime ayarları
 
 `jsb-forge` ile BAYSIM henüz aynı UDP protokolünü kullanmıyor. Ortak ve sürümlenmiş telemetri sözleşmesi ayrı bir geliştirme adımıdır.
 
@@ -19,8 +20,19 @@ BAYSIM, JSBSim uçuşlarını Godot 4 içinde canlı veya kayıttan görselleşt
 - [Geliştirme yol haritası](docs/roadmap.md)
 - [Gerçek dünya veri ve AirportPack planı](docs/real-world-data.md)
 - [Görsel modeller ve varlık provenansı](models/README.md)
+- [Python launcher kullanımı ve mimarisi](launcher/README.md)
 
 Davranış, veri sözleşmesi veya mimari değiştiğinde ilgili belge kod ve testlerle aynı commit içinde güncellenir.
+
+## Başlatma
+
+Godot editörünü açmak gerekmez. Windows'ta `start_baysim.cmd` dosyasına çift tıklayın veya:
+
+```powershell
+python run_baysim.py
+```
+
+Splash ekranından sonra Godot, JSBSim ve UDP kontrollerinin bulunduğu launcher açılır. Renderer kullanıcı onayıyla başlatılır.
 
 ## Dünya koordinatları
 
