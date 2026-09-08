@@ -40,6 +40,31 @@ func _apply_world_config(config: Dictionary) -> void:
 	if airport_environment != null:
 		airport_environment.world_manifest_path = manifest_path
 
+	_apply_terrain_config(manifest_path)
+
+
+func _apply_terrain_config(world_manifest_path: String) -> void:
+	## Arazi tile'ının yolu dünya paketinin kendi manifestinden gelir; sahnede
+	## sabit bir yol tutmak paket değiştiğinde sessizce yanlış araziyi yükler.
+	var terrain := get_node_or_null("Terrain")
+	if terrain == null:
+		return
+
+	var world := _load_config(world_manifest_path)
+	var render: Dictionary = world.get("render", {})
+	var relative := str(render.get("terrain_manifest", ""))
+	if relative.is_empty():
+		push_warning("Dünya paketi arazi manifesti bildirmiyor: %s" % world_manifest_path)
+		terrain.build_on_ready = false
+		return
+
+	var terrain_manifest := world_manifest_path.get_base_dir().path_join(relative)
+	if not FileAccess.file_exists(terrain_manifest):
+		push_error("Arazi manifesti bulunamadı: %s" % terrain_manifest)
+		terrain.build_on_ready = false
+		return
+	terrain.manifest_path = terrain_manifest
+
 
 func _config_path_from_arguments() -> String:
 	for argument in OS.get_cmdline_user_args():

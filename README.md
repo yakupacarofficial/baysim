@@ -4,8 +4,10 @@ BAYSIM, JSBSim uçuşlarını Godot 4 içinde canlı veya kayıttan görselleşt
 
 ## Mevcut durum
 
-- TB2 GLB modeli ve düz pist/zemin sahnesi
-- Resmî DHMİ eşik verilerinden üretilen LTBU prosedürel pist iskeleti
+- TB2 GLB modeli
+- Resmî DHMİ eşik verilerinden üretilen LTBU prosedürel pisti, gerçek eşik irtifalarıyla
+- Copernicus GLO-30 tabanlı 30 × 30 km LTBU arazisi, pist-arazi dikişiyle
+- AirportPack doğrulayıcısı ve arazi üreticisi (`tools/world_builder`)
 - Takip, kokpit ve kuyruk kameraları (`1`, `2`, `3`)
 - Uçuş telemetrisi HUD'u
 - Yerel north/east veya WGS84 tabanlı konumlandırma
@@ -22,12 +24,15 @@ BAYSIM, JSBSim uçuşlarını Godot 4 içinde canlı veya kayıttan görselleşt
 - [Gerçek dünya veri ve AirportPack planı](docs/real-world-data.md)
 - [LTBU DEM/OSM uygulama akışı](docs/ltbu-environment-workflow.md)
 - [Dünya paketi klasör kuralları](worlds/README.md)
+- [World builder: doğrulama ve arazi üretimi](tools/world_builder/README.md)
 - [Görsel modeller ve varlık provenansı](models/README.md)
 - [Python launcher kullanımı ve mimarisi](launcher/README.md)
 
 Davranış, veri sözleşmesi veya mimari değiştiğinde ilgili belge kod ve testlerle aynı commit içinde güncellenir.
 
 ## Başlatma
+
+Depo, LTBU arazisiyle birlikte klonlandığı gibi çalışır. Araziyi ham DEM'den **yeniden üretmek** isterseniz önce `git lfs pull` gerekir; ayrıntı için [world builder belgesi](tools/world_builder/README.md).
 
 Godot editörünü açmak gerekmez. Windows'ta `start_baysim.cmd` dosyasına çift tıklayın veya:
 
@@ -56,9 +61,20 @@ MSL irtifası şu an WGS84 elipsoit yüksekliğine yerel bir yaklaşım olarak k
 
 ## Testler
 
-Godot komut satırı PATH içindeyse:
+GDScript ve launcher testlerini tek komutta çalıştırın:
 
 ```powershell
-godot --headless --path . --script res://tests/test_geo_reference.gd
-godot --headless --path . --script res://tests/test_fdm_link.gd
+.\run_tests.cmd
 ```
+
+```bash
+./run_tests.sh
+```
+
+Godot yürütülebiliri PATH'te değilse `BAYSIM_GODOT` ortam değişkeniyle yol verilir. Yalnızca launcher testleri için:
+
+```powershell
+python -m unittest discover -s launcher/tests -v
+```
+
+Aynı testler her push ve pull request'te GitHub Actions üzerinde çalışır ([.github/workflows/ci.yml](.github/workflows/ci.yml)).

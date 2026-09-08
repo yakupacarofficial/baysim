@@ -1,0 +1,54 @@
+{
+  "format_version": 1,
+  "world_id": "LTBU",
+  "generated_at": "2026-09-08",
+  "generator": "tools/world_builder dem crop",
+  "source_id": "copernicus_glo30_ltbu",
+  "source_sha256": "be8bb8108831c1f801633d0284b3e6c51dfac42abb54a3c33a2843b68fbe8c75",
+  "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+  "tiles": [
+    {
+      "tile_id": "ltbu_15km_30m",
+      "file": "ltbu_15km_30m.f32",
+      "sha256": "38f8406c1722ea8d8c68854a1d6c69a583e8851995bfea1776d407934bc0aad1",
+      "size_bytes": 4008004,
+      "width": 1001,
+      "height": 1001,
+      "sample_format": "float32_le",
+      "row_order": "north_to_south",
+      "column_order": "west_to_east",
+      "grid": {
+        "space": "local_enu_metres",
+        "step_m": 30.0,
+        "radius_m": 15000.0,
+        "east_min_m": -15000.0,
+        "east_max_m": 15000.0,
+        "north_min_m": -15000.0,
+        "north_max_m": 15000.0
+      },
+      "origin": {
+        "lat_deg": 41.1383125,
+        "lon_deg": 27.919002777777777,
+        "alt_msl_m": 164.4
+      },
+      "height_reference": "Local ENU 'up' relative to the world origin, earth curvature included. Add origin.alt_msl_m to recover MSL elevation.",
+      "vertical_datum": "MSL (geoid-referenced), consistent with Copernicus DEM EGM2008",
+      "enu_up_min_m": -199.69110107421875,
+      "enu_up_max_m": 79.44131469726562,
+      "source_msl_min_m": -0.21573596997146835,
+      "source_msl_max_m": 254.9916640353035,
+      "runway_stitching": {
+        "runways": [
+          "04/22"
+        ],
+        "shoulder_m": 60.0,
+        "blend_m": 240.0,
+        "depress_m": 0.15,
+        "note": "Grid nodes within half-width + shoulder of a runway centreline are forced onto the runway surface plane lowered by depress_m, then smoothstepped back to the DEM across blend_m. The depression keeps the runway mesh strictly above the terrain so the two cannot z-fight."
+      },
+      "water_cells": 50471,
+      "water_note": "Cells where the source DEM reads exactly 0.0 m MSL, which Copernicus DEM uses for sea surface. Counted before the ENU and curvature transform, where the value is still meaningful.",
+      "samples_outside_source": 0
+    }
+  ]
+}

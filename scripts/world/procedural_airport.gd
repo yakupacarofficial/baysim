@@ -66,24 +66,27 @@ func _create_runway_mesh(runway: Dictionary, geometry: Dictionary) -> MeshInstan
 
 
 func _build_quad_mesh(corners: PackedVector3Array, geometry: Dictionary) -> ArrayMesh:
-	var normal := (corners[1] - corners[0]).cross(corners[2] - corners[0]).normalized()
 	var width_m: float = geometry["width_m"]
 	var length_m: float = geometry["spatial_length_m"]
-	var vertices := PackedVector3Array([
-		corners[0], corners[1], corners[2],
-		corners[1], corners[3], corners[2],
+	# corners: 0=başlangıç sol, 1=başlangıç sağ, 2=bitiş sol, 3=bitiş sağ
+	var corner_uvs := PackedVector2Array([
+		Vector2(0.0, 0.0), Vector2(width_m, 0.0),
+		Vector2(0.0, length_m), Vector2(width_m, length_m),
 	])
-	var uvs := PackedVector2Array([
-		Vector2(0.0, 0.0), Vector2(width_m, 0.0), Vector2(0.0, length_m),
-		Vector2(width_m, 0.0), Vector2(width_m, length_m), Vector2(0.0, length_m),
-	])
+	# Godot ön yüz için SAAT YÖNÜ sarımı kullanır; sağ-el normali görünen
+	# yüzün tersine bakar. Yukarı bakan pist için sağ-el normali -Y olmalı.
+	var winding := PackedInt32Array([0, 2, 1, 1, 2, 3])
+	# Gölgeleme normali sarımdan bağımsız olarak yukarıyı göstermeli.
+	var normal := (corners[2] - corners[0]).cross(corners[1] - corners[0]).normalized()
+	if normal.y < 0.0:
+		normal = -normal
 
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for index in range(vertices.size()):
+	for corner_index in winding:
 		surface.set_normal(normal)
-		surface.set_uv(uvs[index])
-		surface.add_vertex(vertices[index])
+		surface.set_uv(corner_uvs[corner_index])
+		surface.add_vertex(corners[corner_index])
 	return surface.commit()
 
 

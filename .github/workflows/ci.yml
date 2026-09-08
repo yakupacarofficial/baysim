@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python-tests:
+    name: Python (launcher + world_builder)
+    runs-on: ubuntu-latest
+    steps:
+      # world_builder testleri ham DEM'i gerektirmez; LFS nesnelerini
+      # indirmiyoruz. DEM'e bağlı testler dosya yokken kendini atlar.
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install world_builder dependencies
+        run: python -m pip install --upgrade numpy pillow
+      - name: Run Python tests
+        run: python -m unittest discover -s . -t . -v
+
+      - name: Validate LTBU AirportPack
+        run: python -m tools.world_builder validate LTBU --no-dem
+
+  gdscript-tests:
+    name: GDScript (headless Godot)
+    runs-on: ubuntu-latest
+    env:
+      GODOT_VERSION: "4.7"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Godot ${{ env.GODOT_VERSION }} headless
+        run: |
+          set -euo pipefail
+          base="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable"
+          zip="Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          curl -fL --retry 3 -o godot.zip "${base}/${zip}"
+          unzip -o godot.zip
+          mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" godot
+          chmod +x godot
+          ./godot --version
+
+      - name: Import project assets
+        run: xvfb-run -a ./godot --headless --path . --import
+
+      - name: Run GDScript tests
+        env:
+          BAYSIM_GODOT: ${{ github.workspace }}/godot
+        run: |
+          chmod +x run_tests.sh
+          # Python job covers launcher/tests; keep this job GDScript-only.
+          for t in test_geo_reference test_fdm_link test_airport_pack test_terrain_tile; do
+            echo "== $t =="
+            out="$(xvfb-run -a ./godot --headless --path . --script "res://tests/$t.gd" 2>&1)"
+            echo "$out"
+            echo "$out" | grep -q "$t: OK" || { echo "-- $t: FAIL"; exit 1; }
+            echo "-- $t: PASS"
+          done

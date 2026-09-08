@@ -1,2 +1,12 @@
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
+
+# Ham GIS rasterları Git LFS ile sürümlenir. GitHub'ın dosya başına 100 MB
+# katı sınırı LFS olmadan bu dosyaları reddeder.
+*.tif filter=lfs diff=lfs merge=lfs -text
+*.tiff filter=lfs diff=lfs merge=lfs -text
+
+# Türetilmiş arazi tile'ları düz Git'te tutulur: birkaç MB'lık bu dosyalar
+# sayesinde LFS'siz bir klon da gerçek araziyle çalışır, ham DEM yalnızca
+# yeniden üretim için gerekir. EOL normalizasyonu ikili veriyi bozar.
+*.f32 binary

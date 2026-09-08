@@ -48,6 +48,22 @@ func _init() -> void:
 	assert(runway_mesh != null)
 	assert(runway_mesh.mesh != null)
 	assert(runway_mesh.mesh.get_surface_count() == 1)
+
+	# Sarim yonu. Godot on yuz icin SAAT YONU sarimi kullanir; sag-el
+	# kuraliyla hesaplanan carpim gorunen yuzun tersine bakar. Yukari bakan
+	# pist icin bu deger -Y olmali, yoksa pist yukaridan gorunmez.
+	var runway_arrays := runway_mesh.mesh.surface_get_arrays(0)
+	var runway_vertices: PackedVector3Array = runway_arrays[Mesh.ARRAY_VERTEX]
+	assert(runway_vertices.size() == 6)
+	for triangle in range(0, runway_vertices.size(), 3):
+		var a := runway_vertices[triangle]
+		var b := runway_vertices[triangle + 1]
+		var c := runway_vertices[triangle + 2]
+		assert((b - a).cross(c - a).y < 0.0,
+			"Pist üçgeni ters sarımlı: %d" % triangle)
+	# Golgeleme normalleri yukari bakmali.
+	for surface_normal in runway_arrays[Mesh.ARRAY_NORMAL] as PackedVector3Array:
+		assert(surface_normal.y > 0.0, "Pist normali aşağı bakıyor")
 	assert(absf(
 		float(runway_mesh.get_meta("computed_true_bearing_deg")) - published_bearing
 	) <= 0.2)

@@ -34,7 +34,7 @@ Bu belge işlerin bağımlılık sırasını, her fazın çıktısını ve tamam
 
 ## Faz 1 — pilot gerçek havalimanı paketi
 
-**Durum: LTBU seçildi; dünya sözleşmesi ve prosedürel pist iskeleti tamamlandı, DEM bekliyor.**
+**Durum: tamamlanma ölçütü karşılandı.** LTBU dünya sözleşmesi, prosedürel pist, `world_builder` doğrulayıcısı, Copernicus GLO-30 tabanlı 15 km arazi ve pist-arazi dikişi çalışıyor. Kalan işler (tile/LOD, su yüzeyi, OSM, imagery) Faz 6 ve sonrasına aittir.
 
 ### Kapsam
 
@@ -188,14 +188,13 @@ Bir METAR snapshot'ından üretilen rüzgâr/basınç değerleri hem `jsb-forge`
 
 ## Şimdi başlayabileceğimiz işler
 
-Bir sonraki geliştirme paketi Faz 1'in en küçük dikey dilimidir:
+Faz 1 kapandı. Sıradaki dikey dilim **Faz 3 — sürümlü telemetri protokolü**dür; `jsb-forge` entegrasyonunun, replay'in ve normalize uçak durumunun ortak önkoşuludur.
 
-1. Tek bir kamuya açık pilot havalimanı/ICAO seç.
-2. `worlds/<world_id>/world.json` ve `sources.json` şemalarını tanımla.
-3. Pist uçlarını doğrulanabilir bir fixture olarak kaydet.
-4. WGS84 pist uçlarını ortak ENU orijinine dönüştür.
-5. Godot'ta gerçek uzunluk, genişlik, heading ve irtifada prosedürel pist üret.
-6. Paket doğrulayıcısı ve ölçüm testlerini ekle.
-7. Düz doğrulama zemini geçtikten sonra 20–30 km DEM entegrasyonuna başla.
+Ürün hedefine giden zincir şudur:
 
-Pilot saha seçilmeden rastgele büyük veri indirilmez. Model profili Faz 2'de ele alınır; yalnızca ground-contact doğrulaması için mevcut TB2 ofseti geçici olarak kullanılır.
+1. **Faz 3** — `schema/v1`, oturum/uçak kimliği, paket sıra numarası, quaternion yönelim, kontrol yüzeyleri ve otopilot durumu; eski CSV için geçiş adaptörü.
+2. **Faz 4** — taşımadan bağımsız `AircraftState`, `UdpTelemetrySource` ve `ReplayTelemetrySource`, zaman çizgisi. `fdm_link.gd`'nin çift sorumluluğu ve HUD'un ham sözlüğe bağımlılığı burada çözülür.
+3. **Faz 2** — `AircraftProfile`; kamera ofsetlerinin `World.tscn` içindeki hardcode'unu kaldırır.
+4. **Faz 5** — `jsb-forge` ile pistten kalkış ve havada başlangıç senaryolarının canlı + replay doğrulaması.
+
+Faz 2 sırayı Faz 3/4'ten sonra alır: profil verisinin taşıyacağı kamera ve teker temas bilgisi, normalize uçak durumu yerine oturduğunda daha az yeniden yazılır.

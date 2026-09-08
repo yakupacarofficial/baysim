@@ -20,6 +20,51 @@
         "threshold elevations",
         "published slope"
       ]
+    },
+    {
+      "source_id": "copernicus_glo30_ltbu",
+      "provider": "European Space Agency / Airbus Defence and Space",
+      "distributor": "OpenTopography",
+      "title": "Copernicus DEM GLO-30",
+      "url": "https://portal.opentopography.org/raster?opentopoID=OTSDEM.032021.4326.3",
+      "dataset": "COP30 (GLO-30), global 1 arc-second digital surface model",
+      "retrieved_at": "2026-09-08",
+      "file": "source/copernicus_glo30_ltbu.tif",
+      "storage": "Git LFS",
+      "sha256": "be8bb8108831c1f801633d0284b3e6c51dfac42abb54a3c33a2843b68fbe8c75",
+      "size_bytes": 136481822,
+      "license_status": "Copernicus DEM licence — free access and redistribution permitted with mandatory attribution",
+      "attribution": "© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.",
+      "raster": {
+        "width_px": 8568,
+        "height_px": 6480,
+        "sample_format": "float32",
+        "horizontal_crs": "EPSG:4326",
+        "raster_type": "RasterPixelIsPoint",
+        "pixel_size_deg": 0.0002777777777777778,
+        "bounds_deg": {
+          "west": 26.71999998888889,
+          "east": 29.100000011111113,
+          "south": 40.23999998888889,
+          "north": 42.040000011111104
+        },
+        "nodata_tag": null,
+        "water_encoding": "Sea surface stored as exactly 0.0; no NoData tag is present, so 0.0 must not be treated as missing data."
+      },
+      "vertical_datum": {
+        "declared": "Not declared in the GeoTIFF GeoKeyDirectory",
+        "measured": "MSL (geoid-referenced), consistent with Copernicus DEM EGM2008",
+        "verification": "Sampled at the two published runway thresholds: 04 reads 153.22 m against AIP 154.9 m (-1.68 m); 22 reads 172.28 m against AIP 173.9 m (-1.62 m). An ellipsoidal product would deviate by roughly +36 m in this region, so no geoid separation is applied.",
+        "verified_at": "2026-09-08"
+      },
+      "usage": [
+        "terrain elevation around LTBU",
+        "runway-terrain stitching reference"
+      ],
+      "applied_transforms": [],
+      "verification_needed": [
+        "Exact OpenTopography job URL or dataset DOI from the download record; the portal link above identifies the collection, not this specific extract."
+      ]
     }
   ]
 }

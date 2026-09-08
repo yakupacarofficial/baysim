@@ -16,7 +16,7 @@
   "runways_file": "runways.json",
   "sources_file": "sources.json",
   "render": {
-    "flatten_runways_until_dem": true,
-    "validation_ground_size_m": 20000.0
+    "flatten_runways_until_dem": false,
+    "terrain_manifest": "terrain/manifest.json"
   }
 }

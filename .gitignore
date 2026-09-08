@@ -12,3 +12,7 @@
 # Python bytecode
 __pycache__/
 *.py[cod]
+
+# World builder ara/geçici çıktıları. Ham GeoTIFF kaynakları Git LFS ile
+# sürümlenir (bkz. .gitattributes); yalnızca scratch dizini yok sayılır.
+/data/scratch/

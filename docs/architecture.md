@@ -36,11 +36,25 @@ Launcher'ın ürettiği sürümlü runtime JSON'u ana sahneye uygular. UDP portu
 
 ### `scenes/World.tscn`
 
-Ana sahnedir. Geçici düz zemin, LTBU prosedürel pist üreticisi, ışık, çevre, kamera, Aircraft örneği ve HUD'u bir araya getirir. DEM ve OSM katmanları henüz yoktur.
+Ana sahnedir. Copernicus DEM'den üretilmiş LTBU arazisi, prosedürel pist üreticisi, ışık, çevre, kamera, Aircraft örneği ve HUD'u bir araya getirir. OSM katmanı (apron, taksi yolu, bina) henüz yoktur.
 
 ### `scripts/world/` ve `worlds/LTBU/`
 
-`AirportPack` sürümlü JSON belgelerini yükleyip doğrular; pist eşiklerini ortak WGS84 ECEF→ENU hesabıyla Godot koordinatlarına dönüştürür. `ProceduralAirport` bu geometriden çalışma zamanında pist mesh'i üretir. LTBU dünya/pist/kaynak manifestleri ilk gerçek dünya fixture'ıdır. DEM ve OSM hattı için [LTBU çevre iş akışı](ltbu-environment-workflow.md) kullanılır.
+`AirportPack` sürümlü JSON belgelerini yükleyip doğrular; pist eşiklerini ortak WGS84 ECEF→ENU hesabıyla Godot koordinatlarına dönüştürür. `ProceduralAirport` bu geometriden çalışma zamanında pist mesh'i üretir. `TerrainTile` world builder'ın ürettiği arazi tile'ını yükleyip mesh'e çevirir. LTBU dünya/pist/kaynak/arazi manifestleri ilk gerçek dünya paketidir. Üretim hattı için [LTBU çevre iş akışı](ltbu-environment-workflow.md) kullanılır.
+
+### `tools/world_builder/`
+
+Manifestleri doğrulayan ve ham GIS kaynaklarından türetilmiş dünya varlıkları üreten Python paketidir. Godot çalışma zamanı ham GIS verisi okumaz. `validate` komutu ölçüm kapılarını (pist uzunluğu, bearing, eğim, kaynak hash'i, DEM–eşik irtifa farkı) makinece kontrol eder; `dem crop` DEM'i düzenli ENU ızgarasına yeniden örnekler ve pist çevresini araziye diker; `imagery crop` ortofotoyu aynı kareye giydirir. Ayrıntı ve tasarım gerekçeleri için [world builder belgesi](../tools/world_builder/README.md) okunmalıdır.
+
+Yalnızca `numpy` ve `Pillow` kullanır; bu bağımlılıklar BAYSIM launcher'ına ya da Godot çalışma zamanına girmez.
+
+### `scripts/world/terrain_tile.gd`
+
+Arazi tile'ı düzenli bir ENU metre ızgarası olduğu için bu sınıfta hiç jeodezi hesabı yoktur: düğüm konumu doğrudan ızgara adımından gelir, yükseklikler zaten dünya orijinine göre ENU `up` cinsindendir. Pist geometrisi de aynı çerçevede üretildiğinden ikisi ek bir hizalama adımı olmadan örtüşür.
+
+`lod_step` her N. örneği alarak mesh yoğunluğunu düşürür. Bu geçici bir çözümdür; kamera çevresinde tile yaşam döngüsü ve gerçek LOD Faz 6'nın konusudur.
+
+UV, tile içindeki normalize konumdur (`0..1`). Ortofoto aynı ENU karesine üretildiği için `uv1_scale = 1` ile birebir oturur; tekrarlayan detay dokuları uv1_scale'i büyüterek döşenir. Böylece doku ölçeği `lod_step`'ten bağımsızdır. Manifestte `imagery` bölümü varsa doku otomatik yüklenir, yoksa sahnedeki mevcut malzeme korunur.
 
 ### `scripts/fdm_link.gd`
 
@@ -61,7 +75,11 @@ Varsayılan kaynak [default_world_origin.tres](../resources/default_world_origin
 
 ### `models/TB-2/aircraft.tscn`
 
-Bugünkü tek görsel uçak sahnesidir. TB2 GLB modelini bir `ModelRoot` altında eksen ve yükseklik düzeltmesiyle tutar. Model ayrıntıları ve açık kayıtlar için [TB-2 model belgesi](../models/TB-2/README.md) okunmalıdır.
+Bugünkü tek görsel uçak sahnesidir. TB2 GLB modelini bir `ModelRoot` altında eksen ve yükseklik düzeltmesiyle tutar; sahnenin kendisi script taşımaz, `fdm_link.gd` yalnızca `World.tscn` içindeki örneğe uygulanır. Model ayrıntıları ve açık kayıtlar için [TB-2 model belgesi](../models/TB-2/README.md) okunmalıdır.
+
+### `tools/measure_model.gd`
+
+Editörden çalıştırılan bir `EditorScript`'tir. Açık model sahnesinin (yoksa TB-2 paketinin) birleşik AABB'sini yazar; yeni model eklerken kanat açıklığı, uzunluk ve teker temas ofseti ölçmek için kullanılır. Çalışma zamanı sahnesine dahil değildir.
 
 ### `scripts/camera_rig.gd`
 
@@ -108,10 +126,13 @@ Euler dönüşümü bugün JSBSim işaret varsayımıyla `Quaternion.from_euler(
 ## Bilinen teknik borçlar
 
 - Tek GLB ve tek Aircraft sahnesi hardcoded durumdadır.
-- `scenes/hud.gd`, aktif `scripts/hud.gd` dosyasının kullanılmayan bir kopyasıdır.
+- `scripts/fdm_link.gd` hem UDP taşıma/ayrıştırma hem uçak pozu uygulama sorumluluğunu taşır; `scripts/hud.gd` normalize durum yerine ham `tel` sözlüğünü okur.
+- `scripts/world_controller.gd` yalnızca `world_id == "LTBU"` paketini kabul eder.
 - Eski CSV'de sürüm, uçak kimliği ve paket sıra numarası yoktur.
 - `mode=0/1` anlamları prototip senaryoya özeldir.
-- Dünya düz ve 10 km'lik tekrar eden bir zemin parçasıdır; gerçek arazi yoktur.
-- MSL yüksekliği geoit ayrımı uygulanmadan ECEF yüksekliği için yerel yaklaşım olarak kullanılır.
+- Arazi tek bir 30 × 30 km mesh'tir; tile yaşam döngüsü ve LOD yoktur. `lod_step` tüm tile'ı aynı oranda seyreltir ve pist dikiş koridorunu çözemeyecek kadar kabalaşabildiği için 1'de tutulur (1M düğüm). Bu sınırın dışında dünya boştur.
+- Godot ön yüz için saat yönü sarımı kullanır: prosedürel mesh üreten her yerde sağ-el normali görünen yüzün TERSİNE bakmalıdır. Ters sarım sessizce görünmez geometri üretir; `tests/test_airport_pack.gd` ve `tests/test_terrain_tile.gd` bunu kontrol eder.
+- Su yüzeyleri araziye gömülü düz alanlardır; ayrı bir su malzemesi veya maskesi yoktur.
+- MSL yüksekliği geoit ayrımı uygulanmadan ECEF yüksekliği için yerel yaklaşım olarak kullanılır. LTBU DEM'i ölçümle MSL referanslı doğrulandığı için bu paket etkilenmez; farklı dikey datumdaki bir kaynak açık dönüşüm gerektirir.
 - Çok uzun uçuşlarda yerel ENU merkezinin yeniden taşınması, yani floating-origin mekanizması henüz yoktur.
 - BAYSIM'den simülasyona kontrol komutu gönderen bir geri kanal yoktur.
