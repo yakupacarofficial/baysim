@@ -14,6 +14,8 @@ python run_baysim.py
 
 Splash ekranından sonra kontrol paneli açılır. Renderer varsayılan olarak otomatik başlamaz; kullanıcı `BAYSIM'i başlat` düğmesine basar. İstenirse ayarlardan sonraki açılışlar için otomatik başlatma seçilebilir.
 
+Yeni kullanıcı ayarlarının WGS84 orijini pilot LTBU paketinin pist orta noktasından okunur. Dünya kimliği içermeyen eski `launcher/settings.json` dosyaları açılışta LTBU/WGS84 orijinine taşınır; Godot, JSBSim, port ve görüntü tercihleri korunur.
+
 ## Sağlık kontrolleri
 
 Launcher dört ayrı kontrol yapar:

@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_geo")
-origin_lat_deg = 0.0
-origin_lon_deg = 0.0
-origin_alt_msl_m = 0.0
+origin_lat_deg = 41.1383125
+origin_lon_deg = 27.919002777777777
+origin_alt_msl_m = 164.4

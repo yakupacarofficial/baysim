@@ -1,0 +1,25 @@
+{
+  "format_version": 1,
+  "world_id": "LTBU",
+  "retrieved_at": "2026-09-08",
+  "sources": [
+    {
+      "source_id": "dhmi_aip_ltbu_ad_2",
+      "provider": "DHMİ",
+      "title": "AIP Türkiye — LTBU AD 2",
+      "url": "https://dhmi.gov.tr/AIPDocuments/LT_AD_2_LTBU_en.pdf",
+      "document_date": "2024-10-03",
+      "section": "LTBU AD 2.12 Runway Physical Characteristics",
+      "license_status": "Reference only; source PDF is not redistributed by BAYSIM",
+      "sha256": "c64953581b3e7a3f13abc967e7a5e948c986646ee3bc6e1fe09c6d9df4b7a429",
+      "usage": [
+        "runway designators",
+        "threshold coordinates",
+        "true bearings",
+        "dimensions",
+        "threshold elevations",
+        "published slope"
+      ]
+    }
+  ]
+}

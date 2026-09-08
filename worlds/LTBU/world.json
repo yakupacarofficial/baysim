@@ -1,0 +1,22 @@
+{
+  "format_version": 1,
+  "world_id": "LTBU",
+  "airport_icao": "LTBU",
+  "name": "Tekirdağ Çorlu Atatürk Havalimanı",
+  "origin": {
+    "lat_deg": 41.1383125,
+    "lon_deg": 27.919002777777777,
+    "alt_msl_m": 164.4,
+    "horizontal_datum": "WGS84",
+    "vertical_datum": "AIP_MSL"
+  },
+  "bounds": {
+    "radius_m": 15000.0
+  },
+  "runways_file": "runways.json",
+  "sources_file": "sources.json",
+  "render": {
+    "flatten_runways_until_dem": true,
+    "validation_ground_size_m": 20000.0
+  }
+}

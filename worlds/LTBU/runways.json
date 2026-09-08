@@ -1,0 +1,30 @@
+{
+  "format_version": 1,
+  "world_id": "LTBU",
+  "runways": [
+    {
+      "id": "04/22",
+      "designators": ["04", "22"],
+      "declared_length_m": 3000.0,
+      "width_m": 45.0,
+      "surface": "concrete",
+      "published_slope_percent": 0.6,
+      "thresholds": {
+        "04": {
+          "lat_deg": 41.129469444444446,
+          "lon_deg": 27.905494444444443,
+          "elevation_msl_m": 154.9,
+          "true_bearing_deg": 49.10,
+          "displaced_threshold_m": 0.0
+        },
+        "22": {
+          "lat_deg": 41.14715555555556,
+          "lon_deg": 27.93251111111111,
+          "elevation_msl_m": 173.9,
+          "true_bearing_deg": 229.12,
+          "displaced_threshold_m": 0.0
+        }
+      }
+    }
+  ]
+}

@@ -5,6 +5,7 @@ BAYSIM, JSBSim uçuşlarını Godot 4 içinde canlı veya kayıttan görselleşt
 ## Mevcut durum
 
 - TB2 GLB modeli ve düz pist/zemin sahnesi
+- Resmî DHMİ eşik verilerinden üretilen LTBU prosedürel pist iskeleti
 - Takip, kokpit ve kuyruk kameraları (`1`, `2`, `3`)
 - Uçuş telemetrisi HUD'u
 - Yerel north/east veya WGS84 tabanlı konumlandırma
@@ -19,6 +20,7 @@ BAYSIM, JSBSim uçuşlarını Godot 4 içinde canlı veya kayıttan görselleşt
 - [Geçici CSV telemetri sözleşmesi](docs/telemetry-legacy-csv.md)
 - [Geliştirme yol haritası](docs/roadmap.md)
 - [Gerçek dünya veri ve AirportPack planı](docs/real-world-data.md)
+- [LTBU DEM/OSM uygulama akışı](docs/ltbu-environment-workflow.md)
 - [Dünya paketi klasör kuralları](worlds/README.md)
 - [Görsel modeller ve varlık provenansı](models/README.md)
 - [Python launcher kullanımı ve mimarisi](launcher/README.md)

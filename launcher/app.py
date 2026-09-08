@@ -408,6 +408,7 @@ class LauncherApp:
                 godot_executable=self.godot_var.get().strip(),
                 jsb_forge_path=self.jsb_forge_var.get().strip(),
                 jsbsim_python=self.jsbsim_python_var.get().strip(),
+                world_id=self.settings.world_id,
                 telemetry_port=int(self.port_var.get()),
                 position_source=self.position_source_var.get(),
                 origin_lat_deg=float(self.origin_lat_var.get()),

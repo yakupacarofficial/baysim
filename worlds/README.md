@@ -13,4 +13,4 @@ Her gerçek dünya bölgesi `worlds/<world_id>/` altında bağımsız ve sürüm
 
 Büyük üretilmiş DEM, imagery ve mesh çıktıları ana Git geçmişine eklenmemelidir. Küçük manifestler, üretim tarifleri ve test fixture'ları sürümlenir. Ayrıntılı veri kuralları için [`docs/real-world-data.md`](../docs/real-world-data.md) okunmalıdır.
 
-Pilot havalimanı seçildiğinde `<world_id>` sabitlenmeden veri indirme işlemine başlanmaz.
+İlk pilot havalimanı LTBU olarak sabitlenmiştir. Paket ayrıntıları ve doğrulama notları için [`LTBU/README.md`](LTBU/README.md) okunmalıdır.

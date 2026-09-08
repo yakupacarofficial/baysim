@@ -36,7 +36,11 @@ Launcher'ın ürettiği sürümlü runtime JSON'u ana sahneye uygular. UDP portu
 
 ### `scenes/World.tscn`
 
-Ana sahnedir. Düz zemin, pist, merkez çizgisi, ışık, çevre, kamera, Aircraft örneği ve HUD'u bir araya getirir. Gerçek arazi veya havaalanı verisi henüz yoktur.
+Ana sahnedir. Geçici düz zemin, LTBU prosedürel pist üreticisi, ışık, çevre, kamera, Aircraft örneği ve HUD'u bir araya getirir. DEM ve OSM katmanları henüz yoktur.
+
+### `scripts/world/` ve `worlds/LTBU/`
+
+`AirportPack` sürümlü JSON belgelerini yükleyip doğrular; pist eşiklerini ortak WGS84 ECEF→ENU hesabıyla Godot koordinatlarına dönüştürür. `ProceduralAirport` bu geometriden çalışma zamanında pist mesh'i üretir. LTBU dünya/pist/kaynak manifestleri ilk gerçek dünya fixture'ıdır. DEM ve OSM hattı için [LTBU çevre iş akışı](ltbu-environment-workflow.md) kullanılır.
 
 ### `scripts/fdm_link.gd`
 

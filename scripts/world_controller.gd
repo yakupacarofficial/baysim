@@ -19,9 +19,26 @@ func _enter_tree() -> void:
 		push_error("Desteklenmeyen launcher config_version")
 		return
 
+	_apply_world_config(config)
 	_apply_aircraft_config(config)
 	call_deferred("_apply_display_config", config)
 	print("BAYSIM launcher ayarlari uygulandi: %s" % config_path)
+
+
+func _apply_world_config(config: Dictionary) -> void:
+	var world: Dictionary = config.get("world", {})
+	if world.is_empty():
+		return
+	if str(world.get("world_id", "")) != "LTBU":
+		push_error("Bu surumde yalnizca LTBU dunya paketi destekleniyor")
+		return
+	var manifest_path := str(world.get("manifest_path", ""))
+	if manifest_path.is_empty() or not FileAccess.file_exists(manifest_path):
+		push_error("Dunya manifesti bulunamadi: %s" % manifest_path)
+		return
+	var airport_environment := get_node_or_null("AirportEnvironment")
+	if airport_environment != null:
+		airport_environment.world_manifest_path = manifest_path
 
 
 func _config_path_from_arguments() -> String:

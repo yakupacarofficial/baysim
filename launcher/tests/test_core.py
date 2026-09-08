@@ -49,6 +49,7 @@ class LauncherSettingsTests(unittest.TestCase):
             write_runtime_config(settings, path)
             payload = json.loads(path.read_text(encoding="utf-8"))
         self.assertEqual(payload["config_version"], 1)
+        self.assertEqual(payload["world"]["world_id"], "LTBU")
         self.assertEqual(payload["telemetry"]["port"], 5055)
         self.assertEqual(payload["position"]["source"], "wgs84")
         self.assertEqual(payload["world_origin"]["alt_msl_m"], 42.5)
@@ -57,6 +58,18 @@ class LauncherSettingsTests(unittest.TestCase):
         settings = self.valid_settings()
         settings.telemetry_port = 70000
         self.assertTrue(any("UDP portu" in error for error in settings.validation_errors()))
+
+    def test_legacy_settings_migrate_to_ltbu_origin(self) -> None:
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "settings.json"
+            path.write_text(
+                json.dumps({"position_source": "local", "origin_lat_deg": 0.0}),
+                encoding="utf-8",
+            )
+            settings = load_settings(path)
+        self.assertEqual(settings.world_id, "LTBU")
+        self.assertEqual(settings.position_source, "wgs84")
+        self.assertAlmostEqual(settings.origin_lat_deg, 41.1383125)
 
     def test_godot_command_uses_user_argument_separator(self) -> None:
         settings = self.valid_settings()

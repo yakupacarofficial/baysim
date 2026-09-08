@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://hbrpqex7fvee" path="res://scripts/hud.gd" id="8_b3faq"]
 [ext_resource type="Resource" path="res://resources/default_world_origin.tres" id="9_origin"]
 [ext_resource type="Script" path="res://scripts/world_controller.gd" id="10_world"]
+[ext_resource type="Script" path="res://scripts/world/procedural_airport.gd" id="11_airport"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_jxc04"]
 size = Vector2(10000, 10000)
@@ -19,15 +20,6 @@ albedo_texture = ExtResource("1_hlk0d")
 roughness_texture = ExtResource("3_b3faq")
 normal_enabled = true
 normal_texture = ExtResource("2_0uv0p")
-
-[sub_resource type="BoxMesh" id="BoxMesh_1hvs6"]
-size = Vector3(45, 0.3, 3000)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqs1s"]
-albedo_color = Color(0.18039216, 0.18039216, 0.1882353, 1)
-uv1_scale = Vector3(0.25, 0.25, 0.25)
-uv1_triplanar = true
-texture_filter = 5
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fx35i"]
 ground_bottom_color = Color(0.24313726, 0.4, 0.20784314, 1)
@@ -39,12 +31,6 @@ sky_material = SubResource("ProceduralSkyMaterial_fx35i")
 background_mode = 2
 sky = SubResource("Sky_jxc04")
 
-[sub_resource type="BoxMesh" id="BoxMesh_8dijw"]
-size = Vector3(1, 0.05, 2800)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jxc04"]
-albedo_color = Color(0.9098039, 0.9098039, 0.9098039, 1)
-
 [node name="World" type="Node3D" unique_id=436287484]
 script = ExtResource("10_world")
 
@@ -55,10 +41,8 @@ surface_material_override/0 = SubResource("StandardMaterial3D_io8um")
 script = ExtResource("4_0uv0p")
 target = NodePath("../Aircraft")
 
-[node name="Runway" type="MeshInstance3D" parent="." unique_id=1795043395]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00728631, -0.012241125, 0.003639698)
-mesh = SubResource("BoxMesh_1hvs6")
-surface_material_override/0 = SubResource("StandardMaterial3D_kqs1s")
+[node name="AirportEnvironment" type="Node3D" parent="."]
+script = ExtResource("11_airport")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=872518750]
 transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, 0, 0, 0)
@@ -73,11 +57,6 @@ target = NodePath("../Aircraft")
 chase_offset = Vector3(0, 20, 15)
 chase_smooth = 1.0
 cockpit_offset = Vector3(0, 1, -1.5)
-
-[node name="CenterLine" type="MeshInstance3D" parent="." unique_id=1398567692]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, -1500)
-mesh = SubResource("BoxMesh_8dijw")
-surface_material_override/0 = SubResource("StandardMaterial3D_jxc04")
 
 [node name="Aircraft" parent="." unique_id=156076117 instance=ExtResource("1_kqs1s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -50)

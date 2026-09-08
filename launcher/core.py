@@ -15,6 +15,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 SETTINGS_PATH = Path(__file__).resolve().parent / "settings.json"
 RUNTIME_CONFIG_PATH = PROJECT_ROOT / "runtime" / "launcher_config.json"
 RUNTIME_LOG_PATH = PROJECT_ROOT / "runtime" / "godot.log"
+DEFAULT_WORLD_MANIFEST_PATH = PROJECT_ROOT / "worlds" / "LTBU" / "world.json"
 
 
 @dataclass(slots=True)
@@ -22,6 +23,7 @@ class LauncherSettings:
     godot_executable: str = ""
     jsb_forge_path: str = ""
     jsbsim_python: str = ""
+    world_id: str = "LTBU"
     telemetry_port: int = 5005
     position_source: str = "local"
     origin_lat_deg: float = 0.0
@@ -43,6 +45,8 @@ class LauncherSettings:
             errors.append("UDP portu 1–65535 arasında olmalı.")
         if self.position_source not in {"local", "wgs84"}:
             errors.append("Konum kaynağı local veya wgs84 olmalı.")
+        if self.world_id != "LTBU":
+            errors.append("Bu sürümde yalnızca LTBU dünya paketi destekleniyor.")
         if not -90.0 <= self.origin_lat_deg <= 90.0:
             errors.append("Dünya orijini enlemi -90–90 derece arasında olmalı.")
         if not -180.0 <= self.origin_lon_deg <= 180.0:
@@ -67,6 +71,10 @@ class LauncherSettings:
     def runtime_config(self) -> dict[str, Any]:
         return {
             "config_version": 1,
+            "world": {
+                "world_id": self.world_id,
+                "manifest_path": "res://worlds/LTBU/world.json",
+            },
             "telemetry": {
                 "port": self.telemetry_port,
                 "connection_timeout_s": self.connection_timeout_s,
@@ -96,11 +104,25 @@ class CheckResult:
 def detected_defaults() -> LauncherSettings:
     jsb_forge = PROJECT_ROOT.parent / "jsb-forge"
     jsb_python = jsb_forge / "venvbaykar" / "Scripts" / "python.exe"
+    origin = _default_world_origin()
     return LauncherSettings(
         godot_executable=str(find_godot_executable() or ""),
         jsb_forge_path=str(jsb_forge if jsb_forge.is_dir() else ""),
         jsbsim_python=str(jsb_python if jsb_python.is_file() else ""),
+        position_source="wgs84",
+        origin_lat_deg=float(origin.get("lat_deg", 0.0)),
+        origin_lon_deg=float(origin.get("lon_deg", 0.0)),
+        origin_alt_msl_m=float(origin.get("alt_msl_m", 0.0)),
     )
+
+
+def _default_world_origin() -> dict[str, Any]:
+    try:
+        world = json.loads(DEFAULT_WORLD_MANIFEST_PATH.read_text(encoding="utf-8"))
+        origin = world.get("origin", {})
+        return origin if isinstance(origin, dict) else {}
+    except (OSError, json.JSONDecodeError, TypeError):
+        return {}
 
 
 def find_godot_executable() -> Path | None:
@@ -138,6 +160,15 @@ def load_settings(path: Path = SETTINGS_PATH) -> LauncherSettings:
     allowed = {field.name for field in fields(LauncherSettings)}
     merged = asdict(defaults)
     merged.update({key: value for key, value in raw.items() if key in allowed})
+    # Launcher v1 ayarlarında dünya kimliği yoktu ve 0,0,0 yerel sahnesi
+    # kullanılıyordu. İlk AirportPack'e geçerken yalnızca bu eski biçimi LTBU
+    # orijinine taşı; sürümlü yeni ayarlardaki kullanıcı değerlerine dokunma.
+    if "world_id" not in raw:
+        merged["world_id"] = defaults.world_id
+        merged["position_source"] = defaults.position_source
+        merged["origin_lat_deg"] = defaults.origin_lat_deg
+        merged["origin_lon_deg"] = defaults.origin_lon_deg
+        merged["origin_alt_msl_m"] = defaults.origin_alt_msl_m
     try:
         return LauncherSettings(**merged)
     except (TypeError, ValueError):

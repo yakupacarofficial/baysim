@@ -34,7 +34,7 @@ Bu belge işlerin bağımlılık sırasını, her fazın çıktısını ve tamam
 
 ## Faz 1 — pilot gerçek havalimanı paketi
 
-**Durum: veri hattı tasarlandı; pilot havalimanı seçimi bekleniyor.**
+**Durum: LTBU seçildi; dünya sözleşmesi ve prosedürel pist iskeleti tamamlandı, DEM bekliyor.**
 
 ### Kapsam
 
