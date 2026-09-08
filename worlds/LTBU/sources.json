@@ -65,6 +65,15 @@
       "verification_needed": [
         "Exact OpenTopography job URL or dataset DOI from the download record; the portal link above identifies the collection, not this specific extract."
       ]
+    },
+    {
+      "source_id": "sentinel2_l2a_ltbu",
+      "provider": "Copernicus Sentinel-2",
+      "license_status": "Contains modified Copernicus Sentinel data [2026]",
+      "usage": [
+        "imagery"
+      ],
+      "file": "source/sentinel2_ltbu.tif"
     }
   ]
 }

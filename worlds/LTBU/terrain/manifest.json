@@ -50,5 +50,33 @@
       "water_note": "Cells where the source DEM reads exactly 0.0 m MSL, which Copernicus DEM uses for sea surface. Counted before the ENU and curvature transform, where the value is still meaningful.",
       "samples_outside_source": 0
     }
-  ]
+  ],
+  "imagery": {
+    "tile_id": "ltbu_15km_ortho",
+    "file": "ltbu_15km_ortho.jpg",
+    "sha256": "4a586c85a14b6dab96442943cfd5b5585ffe5f4457dd493d1e5933947e64a5b9",
+    "size_bytes": 2064636,
+    "width": 3001,
+    "height": 3001,
+    "pixel_m": 10.0,
+    "generated_at": "2026-09-08",
+    "source_id": "sentinel2_l2a_ltbu",
+    "source_sha256": null,
+    "attribution": null,
+    "grid": {
+      "space": "local_enu_metres",
+      "radius_m": 15000.0,
+      "east_min_m": -15000.0,
+      "east_max_m": 15000.0,
+      "north_min_m": -15000.0,
+      "north_max_m": 15000.0
+    },
+    "origin": {
+      "lat_deg": 41.1383125,
+      "lon_deg": 27.919002777777777,
+      "alt_msl_m": 164.4
+    },
+    "uv_mapping": "Normalised tile position: u = (east + radius) / (2 * radius), v = (radius - north) / (2 * radius). Pixel centres sit half a texel from the node positions, which is under one pixel of offset and is not corrected.",
+    "samples_outside_source": 0
+  }
 }
