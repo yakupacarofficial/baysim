@@ -27,7 +27,11 @@ func _process(delta: float) -> void:
 			var desired := target.global_position + yaw_basis * chase_offset
 			var t := 1.0 - exp(-chase_smooth * delta)
 			global_position = global_position.lerp(desired, t)
-			look_at(target.global_position, Vector3.UP)
+			var dir := (target.global_position - global_position).normalized()
+			var up := Vector3.UP
+			if abs(dir.dot(up)) > 0.999:
+				up = Vector3.FORWARD
+			look_at(target.global_position, up)
 
 		Mode.COCKPIT:
 			global_transform = target.global_transform * Transform3D(Basis(), cockpit_offset)

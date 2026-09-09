@@ -1,0 +1,8 @@
+# BAYSIM Python Bağımlılıkları
+#
+# Launcher (launcher/) yalnızca standart kütüphane kullanır.
+# Aşağıdaki paketler World Builder araçları ve testleri için gereklidir.
+
+numpy>=1.24
+Pillow>=10.0
+

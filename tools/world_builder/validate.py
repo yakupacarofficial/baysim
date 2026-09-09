@@ -284,6 +284,14 @@ def _check_radius_coverage(dem: GeoTiff, reference, radius_m: float) -> Report:
 
 
 def _find_dem_source(pack: AirportPack) -> dict[str, Any] | None:
+    # Öncelik: usage alanı açıkça arazi/yükseklik belirten kaynak.
+    for entry in pack.sources.get("sources", []):
+        if not isinstance(entry, dict):
+            continue
+        usage = str(entry.get("usage", "")).lower()
+        if usage in ("terrain", "elevation", "dem"):
+            return entry
+    # Fallback: eski paketlerde usage alanı olmayabilir; ilk TIFF'i al.
     for entry in pack.sources.get("sources", []):
         if not isinstance(entry, dict):
             continue

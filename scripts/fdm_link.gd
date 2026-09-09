@@ -54,9 +54,13 @@ func _process(delta: float) -> void:
 	if not _got_first:
 		return
 
-	var t := 1.0 - exp(-smooth * delta)
-	position = position.lerp(_target_pos, t)
-	quaternion = quaternion.slerp(_target_quat, t)
+	if smooth <= 0.0:
+		position = _target_pos
+		quaternion = _target_quat
+	else:
+		var t := 1.0 - exp(-smooth * delta)
+		position = position.lerp(_target_pos, t)
+		quaternion = quaternion.slerp(_target_quat, t)
 
 func _consume_packet(packet: String, received_at_s: float) -> bool:
 	if not _parse(packet):
