@@ -99,6 +99,8 @@ func _apply_imagery(manifest: Dictionary) -> void:
 	material.uv1_scale = Vector3.ONE
 	# Kenarda tekrar etmesin, ufukta tile'ın aynası görünmesin.
 	material.texture_repeat = false
+	# Anizotropik filtreleme eğik açılarda pikselleşmeyi büyük ölçüde azaltır.
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	material.roughness = imagery_roughness
 	material.metallic = 0.0
 	material_override = material
